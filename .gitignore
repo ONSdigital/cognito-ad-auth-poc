@@ -50,6 +50,7 @@ venv.bak
 *.DS_Store
 
 # artifacts
+.terraform
 .serverless
 *.zip
 

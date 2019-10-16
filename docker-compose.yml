@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  lambci:
+    build:
+      dockerfile: conf/docker/images/lambci/Dockerfile
+      context: .
+    volumes:
+      - .:/usr/src/app
