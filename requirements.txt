@@ -4,13 +4,14 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
-awsgi==0.0.5
+--find-links /home/iand/work/ons/cloud/cognito-ad-auth-poc/requirements.txt
+
+aws-wsgi==0.2.3
 certifi==2019.9.11        # via requests
 chardet==3.0.4            # via requests
 click==7.0                # via flask
 flask-dance==2.2.0
 flask==1.1.1
-httptools==0.0.13         # via awsgi
 idna==2.8                 # via requests
 itsdangerous==1.1.0       # via flask
 jinja2==2.10.3            # via flask
@@ -21,6 +22,4 @@ requests==2.22.0          # via flask-dance, requests-oauthlib
 six==1.12.0               # via flask-dance
 urllib3==1.25.6           # via requests
 urlobject==2.4.3          # via flask-dance
-uvloop==0.13.0            # via awsgi
-websockets==8.0.2         # via awsgi
-werkzeug==0.16.0          # via awsgi, flask
+werkzeug==0.16.0          # via flask

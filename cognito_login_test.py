@@ -1,5 +1,13 @@
 import logging
+from flask import (
+    Flask,
+    jsonify
+)
 from pprint import pformat
+
+import awsgi
+
+app = Flask(__name__)
 
 def _get_logger(name):
     handler = logging.StreamHandler()
@@ -9,16 +17,18 @@ def _get_logger(name):
     logger.setLevel(logging.INFO)
     return logger
 
-def handler(event, context):
+
+@app.route('/')
+def index():
+    return (
+        "<h1>Cognito Flask app HELO</h1>",
+        200
+    )
+
+def lambda_handler(event, context):
     logger = _get_logger(__name__)
-    logger.info(f"EVENT:\n{pformat(event)}")
-    logger.info(f"CONTEXT:\n{pformat(context)}")
-    return {
-        "statusCode": 200,
-        "statusDescription": "200 OK",
-        "isBase64Encoded": False,
-        "headers": {
-            "Content-Type": "text/html"
-        },
-        "body": "<h1>Cognito Login Test OK</h1>"
-    }
+
+    response = awsgi.response(app, event, context)
+    logger.info(f"TYPE: {pformat(type(response))}")
+    logger.info(f"RESPONSE: {pformat(response)} ")
+    return response

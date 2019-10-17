@@ -8,8 +8,8 @@ data "aws_subnet" default_az2 {
     default_for_az = true
 }
 
-resource "aws_security_group" "allow_lb_govwifi" {
-    name = "allow_lb_govwifi"
+resource "aws_security_group" "allow_external_traffic" {
+    name = "allow_external_traffic"
     description = "Allowed external traffic to auth-test LB"
 
     tags = merge(
@@ -25,7 +25,7 @@ resource "aws_security_group_rule" "allow_external_http" {
     cidr_blocks = var.external_ingress_cidrs
     protocol = "tcp"
     description = "HTTP external ingress to ALB"
-    security_group_id = "${aws_security_group.allow_lb_govwifi.id}"
+    security_group_id = "${aws_security_group.allow_external_traffic.id}"
 }
 
 resource "aws_lb" "app_load_balancer" {
@@ -34,7 +34,7 @@ resource "aws_lb" "app_load_balancer" {
         "${data.aws_subnet.default_az1.id}",
         "${data.aws_subnet.default_az2.id}"
     ]
-    security_groups = ["${aws_security_group.allow_lb_govwifi.id}"]
+    security_groups = ["${aws_security_group.allow_external_traffic.id}"]
     tags = merge(
         var.common_tags,
         {
@@ -48,7 +48,7 @@ resource "aws_lb_target_group" "app_lb_target_group" {
 
     health_check {
         enabled = true
-        interval = 60
+        interval = 120
         timeout = 30
         path = "/"
     }

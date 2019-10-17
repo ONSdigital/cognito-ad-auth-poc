@@ -40,7 +40,7 @@ resource "aws_lambda_function" "test_auth_app" {
     description = "Test Lambda function to test out cognito auth for apps."
     filename = "${data.archive_file.lambda_bundle.output_path}"
     source_code_hash = filebase64sha256(data.archive_file.lambda_bundle.output_path)
-    handler = "cognito_login_test.handler"
+    handler = "cognito_login_test.lambda_handler"
     runtime = "python3.7"
 
     layers = ["${aws_lambda_layer_version.flask_layer.arn}"]
