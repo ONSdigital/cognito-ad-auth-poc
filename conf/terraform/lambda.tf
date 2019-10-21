@@ -51,5 +51,17 @@ resource "aws_lambda_function" "test_auth_app" {
       var.common_tags,
       {}
     )
+
+    environment {
+      variables = {
+        flask_secret_key = "${var.flask_secret_key}"
+        oauth_client_id = "${aws_cognito_user_pool_client.auth_test_app.id}"
+        oauth_client_secret = "${aws_cognito_user_pool_client.auth_test_app.client_secret}"
+        oauth_base_url = "https://${var.app_auth_domain}"
+        oauth_auth_url = "https://${var.app_auth_domain}/oauth2/authorize"
+        oauth_token_url = "https://${var.app_auth_domain}/oauth2/token"
+        redirect_url = "https://cognito-ad-test.bitmonkey.co.uk"
+      }
+    }
     
 }
