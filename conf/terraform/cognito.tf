@@ -24,4 +24,5 @@ resource "aws_cognito_user_pool_client" "auth_test_app" {
   allowed_oauth_scopes = ["openid", "profile"]
   supported_identity_providers = ["COGNITO"]
   callback_urls = ["https://${var.app_domain}/login/cognito/authorized"]
+  logout_urls = ["https://${var.app_domain}/logout"]
 }

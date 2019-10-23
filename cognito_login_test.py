@@ -3,7 +3,7 @@ import os
 import flask
 from flask_dance.consumer import OAuth2ConsumerBlueprint
 from pprint import pformat
-
+from urllib.parse import (urlencode, urljoin)
 import awsgi
 
 app = flask.Flask(__name__)
@@ -28,6 +28,11 @@ def _get_logger(name):
     return logger
 
 
+@app.route('/logout')
+def logout():
+    flask.session.pop('cognito_oauth_token', None)
+    return flask.redirect('/')
+
 @app.route('/')
 def index():
     if not cognito_blueprint.session.authorized:
@@ -43,14 +48,27 @@ def index():
             login_url=flask.url_for("cognito.login")
         )
     else:
+        logout_link = urljoin(
+            os.environ.get("oauth_base_url"),
+            "logout"
+        )
+        logout_link += "?" + urlencode({
+            "client_id": os.environ.get("oauth_client_id"),
+            "logout_uri": urljoin(
+                os.environ.get("redirect_url"),
+                'logout'
+            )
+        })
         output = flask.render_template_string("""
             <html>
             <head><title>SSO Test site</title></head>
             <body>
-            You are logged in.
+            <p>You are logged in.</p>
+            <p><a href="{{logout_url}}">Logout</a></p>
             </body>
             </html>
-        """)
+        """,
+        logout_url=logout_link)
     return (
         output,
         200
