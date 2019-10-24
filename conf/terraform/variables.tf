@@ -9,6 +9,7 @@ variable "common_tags" {
     "ons:application" = "app-auth-test",
     "ons:application:lifecycle:type" = "sprint",
     "ons:application:lifecycle:eol" = "2019-10-18T12:00",
+    "ons:owner" = "Ian Dash:ian.dash@ons.gov.uk"
   }
 }
 
@@ -26,4 +27,8 @@ variable "app_domain" {
 
 variable "app_auth_domain" {
   description = "hosted UI domain setup for app"
+}
+
+variable "saml_idp_metadata_url" {
+  description = "SAML IDP Metadate URL"
 }

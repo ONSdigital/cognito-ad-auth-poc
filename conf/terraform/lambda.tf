@@ -30,7 +30,7 @@ resource "aws_iam_role_policy_attachment" "basic_lambda_role_policy" {
 
 resource "aws_lambda_layer_version" "flask_layer" {
   layer_name = "flask_layer"
-  filename = "${path.module}/../../flask_layer.zip"
+  filename = "${path.module}/files/flask_layer.zip"
   source_code_hash = filebase64sha256("../../flask_layer.zip")
   compatible_runtimes = ["python3.7"]
 }
@@ -61,6 +61,7 @@ resource "aws_lambda_function" "test_auth_app" {
         oauth_auth_url = "https://${var.app_auth_domain}/oauth2/authorize"
         oauth_token_url = "https://${var.app_auth_domain}/oauth2/token"
         redirect_url = "https://cognito-ad-test.bitmonkey.co.uk"
+        user_profile_url = "https://${var.app_auth_domain}/oauth2/userInfo"
       }
     }
     
